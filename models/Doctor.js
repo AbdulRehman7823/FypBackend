@@ -10,4 +10,4 @@ const doctorSchema =  mongoose.Schema(
 );
 
 const doctor = mongoose.model('Doctor', doctorSchema);
-module.exports.Doctor = doctor; 
+module.exports = doctor; 

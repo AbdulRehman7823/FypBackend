@@ -5,7 +5,7 @@ const respondantSchema =  mongoose.Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     requests:[{
-        userId: { type: String, required: true}
+        userId: { type: String}
      }],
     img: { type: String },
   },
@@ -13,4 +13,4 @@ const respondantSchema =  mongoose.Schema(
 );
 
 const respondant = mongoose.model('Respondant', respondantSchema);
-module.exports.Respondant = respondant; 
+module.exports = respondant; 

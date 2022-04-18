@@ -25,7 +25,11 @@ router.post("/", async (req, res) => {
   if (pharmacist) {
     return res.status(400).send({ message: "This pharmacist is already registered" });
   } else {
-    pharmacist = new User(pharmacist);
+    pharmacist = new Pharmacist();
+    pharmacist.name = req.body.name;
+    pharmacist.email = req.body.email;
+    pharmacist.password = req.body.password;
+    pharmacist.img = req.body.img;
     await pharmacist.save();
     return res.send(pharmacist);
   }

@@ -25,7 +25,12 @@ router.post("/", async (req, res) => {
   if (respondant) {
     return res.status(400).send({ message: "This respondant is already registered" });
   } else {
-    respondant = new User(respondant);
+    respondant = new Respondant();
+    respondant.name = req.body.name;
+    respondant.email = req.body.email;
+    respondant.password = req.body.password;
+    respondant.img = req.body.img;
+    respondant.requests = req.body.requests;
     await respondant.save();
     return res.send(respondant);
   }

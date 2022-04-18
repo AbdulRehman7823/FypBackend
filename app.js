@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+var cors = require('cors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,12 +10,15 @@ const adminRouter = require('./routes/api/adminApi');
 const pharmacistRouter = require('./routes/api/pharmacistApi');
 const doctorRouter = require('./routes/api/doctorApi');
 const respondantRouter = require('./routes/api/respondantApi');
+const productRouter = require('./routes/api/productApi')
 const dotenv = require('dotenv');
 
-dotenv.config();
 
 var app = express();
 
+
+app.use(cors());
+dotenv.config();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,6 +34,7 @@ app.use('/api/admin',adminRouter);
 app.use('/api/pharmacist',pharmacistRouter);
 app.use('/api/doctor',doctorRouter);
 app.use('/api/respondant',respondantRouter);
+app.use('/api/products',productRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
