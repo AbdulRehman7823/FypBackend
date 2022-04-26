@@ -4,6 +4,7 @@ const Doctor = require("../../models/Doctor");
 const Pharmacist = require("../../models/Pharmacist");
 const Respondant = require("../../models/Respondant");
 const Product = require("../../models/Product");
+const Customer = require("../../models/Customer");
 
 router.get("/doctors", async (req, res) => {
   try {
@@ -38,6 +39,20 @@ router.get("/respondant", async (req, res) => {
       res.status(200).send(respondant);
     } else {
       res.status(400).send("There is no respondant available");
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+
+router.get("/customers", async (req, res) => {
+  try {
+    let customers = await Customer.find();
+    if (customers.length > 0) {
+      res.status(200).send(customers);
+    } else {
+      res.status(400).send("There is no customers available");
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -82,6 +97,20 @@ router.delete("/pharmacist/:id", async (req, res) => {
       res.status(400).send(error.message);
     }
   });
+
+  router.delete("/customer/:id", async (req, res) => {
+    try {
+      let customer = await Customer.findByIdAndDelete(req.params.id);
+      if (customer) {
+        res.status(200).send({ message: "customer deleted successfully" });
+      } else {
+        res.status(400).send({ message: "customer is not available" });
+      }
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  });
+
 
   //====================
   router.get('/products',async (req, res) => { 
@@ -156,4 +185,14 @@ router.post('/products',async (req, res)=>{
 });
 
 
-  module.exports = router;
+router.post('/login',async (req, res)=>{
+  try{
+      let admin = new Product();
+      await product.save();
+      return res.status(200).send(product);
+  }catch(err){
+      return res.status(500).send({message:"This product is invalid"});
+  }
+})
+
+module.exports = router;
