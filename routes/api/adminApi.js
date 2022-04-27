@@ -1,14 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Doctor = require("../../models/Doctor");
-const Pharmacist = require("../../models/Pharmacist");
-const Respondant = require("../../models/Respondant");
-const Product = require("../../models/Product");
-const Customer = require("../../models/Customer");
+const User = require("../../models/User");
 
 router.get("/doctors", async (req, res) => {
   try {
-    let doctors = await Doctor.find();
+    let doctors = await User.find({userType:"doctor"},{username:1,email:1,img:1,specialization:1,city:1,phone:1});
     if (doctors.length > 0) {
       res.status(200).send(doctors);
     } else {
@@ -19,22 +15,11 @@ router.get("/doctors", async (req, res) => {
   }
 });
 
-router.get("/pharmacist", async (req, res) => {
-  try {
-    let pharmacist = await Pharmacist.find();
-    if (pharmacist.length > 0) {
-      res.status(200).send(pharmacist);
-    } else {
-      res.status(400).send("There is no pharmacist available");
-    }
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
+
 
 router.get("/respondant", async (req, res) => {
   try {
-    let respondant = await Respondant.find();
+    let respondant = await User.find({userType:"respondant"},{username:1,email:1,img:1,city:1,phone:1});
     if (respondant.length > 0) {
       res.status(200).send(respondant);
     } else {
@@ -48,7 +33,7 @@ router.get("/respondant", async (req, res) => {
 
 router.get("/customers", async (req, res) => {
   try {
-    let customers = await Customer.find();
+    let customers = await User.find({userType:"doctor"},{username:1,email:1,img:1,city:1,phone:1});
     if (customers.length > 0) {
       res.status(200).send(customers);
     } else {
@@ -59,58 +44,18 @@ router.get("/customers", async (req, res) => {
   }
 });
 
-router.delete("/doctors/:id", async (req, res) => {
+router.delete("/users/:id", async (req, res) => {
   try {
-    let doctor = await Doctor.findByIdAndDelete(req.params.id);
-    if (doctor) {
-      res.status(200).send({ message: "Doctor deleted successfully" });
+    let user = await User.findByIdAndDelete(req.params.id);
+    if (user) {
+      res.status(200).send({ message: "user deleted successfully" });
     } else {
-      res.status(400).send({ message: "Doctor is not available" });
+      res.status(400).send({ message: "user is not available" });
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
-
-router.delete("/pharmacist/:id", async (req, res) => {
-    try {
-      let pharmacist = await Pharmacist.findByIdAndDelete(req.params.id);
-      if (pharmacist) {
-        res.status(200).send({ message: "pharmacist deleted successfully" });
-      } else {
-        res.status(400).send({ message: "pharmacist is not available" });
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  });
-
-  router.delete("/respondant/:id", async (req, res) => {
-    try {
-      let respondant = await Respondant.findByIdAndDelete(req.params.id);
-      if (respondant) {
-        res.status(200).send({ message: "respondant deleted successfully" });
-      } else {
-        res.status(400).send({ message: "respondant is not available" });
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  });
-
-  router.delete("/customer/:id", async (req, res) => {
-    try {
-      let customer = await Customer.findByIdAndDelete(req.params.id);
-      if (customer) {
-        res.status(200).send({ message: "customer deleted successfully" });
-      } else {
-        res.status(400).send({ message: "customer is not available" });
-      }
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  });
-
 
   //====================
   router.get('/products',async (req, res) => { 
