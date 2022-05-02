@@ -1,6 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
+const Product = require("../../models/Product")
+
+router.post('/login',async (req, res)=>{
+  console.log("sasaa")
+  try{
+    if(process.env.admin_username == req.body.username && process.env.admin_password == req.body.password){
+      return res.status(200).send({isAdmin:true});
+    }else{
+      return res.status(500).send({message:"Username or password incorrect"});
+    }
+  }catch(err){
+      return res.status(500).send({message:"This product is invalid"});
+  }
+})
 
 router.get("/doctors", async (req, res) => {
   try {
@@ -31,13 +45,13 @@ router.get("/respondant", async (req, res) => {
 });
 
 
-router.get("/customers", async (req, res) => {
+router.get("/patients", async (req, res) => {
   try {
-    let customers = await User.find({userType:"doctor"},{username:1,email:1,img:1,city:1,phone:1});
-    if (customers.length > 0) {
-      res.status(200).send(customers);
+    let patient = await User.find({userType:"patient"},{username:1,email:1,img:1,city:1,phone:1});
+    if (patient.length > 0) {
+      res.status(200).send(patient);
     } else {
-      res.status(400).send("There is no customers available");
+      res.status(400).send("There is no patient available");
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -130,14 +144,5 @@ router.post('/products',async (req, res)=>{
 });
 
 
-router.post('/login',async (req, res)=>{
-  try{
-      let admin = new Product();
-      await product.save();
-      return res.status(200).send(product);
-  }catch(err){
-      return res.status(500).send({message:"This product is invalid"});
-  }
-})
 
 module.exports = router;

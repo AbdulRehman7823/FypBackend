@@ -2,15 +2,34 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../../models/Product');
 
-router.get('/',async (req, res) => { 
+router.get('/',async (req, res) => {
+  try{ 
     let product = await Product.find();
+     if(product.length>0){
+       res.status(200).send(product);
+     }else{
+       res.status(200).send({message:"There is no product"});
+     }
     res.send(product);
+  }catch(err){
+     res.status(500).send(err.message);
+  }
 });
 
 router.get('/:id',async (req, res) => {
+
+  try{
     let id =  req.params.id;
     let product  = await Product.findById(id);
+    if(product){
+      res.status(200).send(product);
+    }else{
+      res.status(400).send({message:"There is no product with this id."});
+    }
     res.send(product);
+  }catch(err){
+    res.status(500).send(err.message);
+  }
 });
 
 
@@ -23,7 +42,12 @@ router.put("/:id", async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).send(updatedProduct);
+    if(updatedProduct){
+      res.status(200).send(updatedProduct);
+    }else{
+      res.status(400).send({message:"There is no product with this id."});
+    }
+    
   } catch (err) {
     res.status(500).send(err.message);
   }

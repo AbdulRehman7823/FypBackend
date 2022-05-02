@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
-const crypto = require("crypto-js");
-const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {
@@ -25,12 +23,13 @@ router.post("/login", async (req, res) => {
     if (user.password !== req.body.password) {
       res.status(500).send({ message: "Password is incorrect" });
     } else {
-      if(user.userType == 'customer'){
+      if(user.userType == 'patient'){
         return res.status(200).send({username: user.username,
                             email: user.email,
                             phone: user.phone,
                             city: user.city,
                             respondants: user.respondants,
+                            doctors: user.doctors,
                             });
                         }
         else if(user.userType == 'doctor'){
@@ -39,7 +38,7 @@ router.post("/login", async (req, res) => {
                                         phone: user.phone,
                                         city: user.city,
                                         specialization: user.specialization,
-                                        requests: user.requests,
+                                        doctorCustomers: user.doctorCustomers,
                                         });
         } else if(user.userType == 'respondant'){
             return res.status(200).send({username: user.username,

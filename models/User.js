@@ -16,6 +16,12 @@ const userSchema =  mongoose.Schema(
    requests:[{
     customerId: { type: String}
     }],
+  doctors:[{
+    doctorId:{type: String}
+  }],
+  doctorCustomers:[{
+    customerId: { type: String}
+  }]
   },
   { timestamps: true }
 );

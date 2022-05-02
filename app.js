@@ -9,6 +9,10 @@ var indexRouter = require('./routes/index');
 const adminRouter = require('./routes/api/adminApi');
 const authRouter = require('./routes/api/auth');
 const productRouter = require('./routes/api/productApi');
+const doctorRouter = require('./routes/api/doctorApi');
+const patientRouter = require('./routes/api/patientApi');
+const respondantRouter = require('./routes/api/respondant');
+
 const dotenv = require('dotenv');
 
 
@@ -31,6 +35,9 @@ app.use('/', indexRouter);
 app.use('/api/admin',adminRouter);
 app.use('/api/auth',authRouter);
 app.use('/api/products',productRouter);
+app.use('/api/doctor',doctorRouter);
+app.use('/api/respondant',respondantRouter);
+app.use('/api/patient',patientRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
