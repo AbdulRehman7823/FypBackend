@@ -60,6 +60,69 @@ router.post("/request/respondant/:id", async (req, res) => {
   }
 });
 
+router.get('/doctors/:id',async (req, res)=>{
+  try{
+    const patient = await User.findById(req.params.id);
+    if(patient && patient.userType=="patient"){
+       const doctors = patient.doctors;
+       console.log(doctors)
+       if(doctors.length > 0){
+         const records = await User.find().where('_id').in(doctors).exec();
+         console.log(records)
+         res.status(200).send(records)
+       }else{
+        res.status(200).send({message:"There  is no Doctor Appointed by current Patient"})
+       }
+    }else{
+      res.status(200).send({message:"There  is no Patient with this ID"})
+    }
+  }catch(err){
+        console.log(err)
+  }
+});
+
+
+router.get('/respondant/:id',async (req, res)=>{
+  try{
+    const patient = await User.findById(req.params.id);
+    if(patient && patient.userType=="patient"){
+       const respondants = patient.respondants;
+       console.log(respondants)
+       if(respondants.length > 0){
+         const records = await User.find().where('_id').in(respondants).exec();
+         console.log(records)
+         res.status(200).send(records)
+       }else{
+        res.status(200).send({message:"There  is no Respondant Appointed by current Patient"})
+       }
+    }else{
+      res.status(200).send({message:"There  is no Patient with this ID"})
+    }
+  }catch(err){
+        res.status(500).send({message:"There is an error "+err.message});
+  }
+});
+
+
+
+
+
+router.get('/:id',async (req, res)=>{
+     
+  const patient = await User.findById(req.params.id);
+  if(patient){
+
+    res.status(200).send(patient);
+  }else{
+    res.status(200).send({message:"There  is no Patient with this ID"})
+  }
+
+});
+
+
+
+
+
 router.post("/request/doctor/:id", async (req, res) => {
   try {
     let patient = await User.findById(req.params.id, {

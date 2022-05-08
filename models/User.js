@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const userSchema =  mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
-    userType:{type: String, required:true},
     email: { type: String, required: true, unique: true },
+    userType:{type: String, required:true},
     password: { type: String, required: true },
     phone:{type: String},
     city:{type: String},
@@ -14,15 +14,22 @@ const userSchema =  mongoose.Schema(
    }],
    specialization:{type: String},
    requests:[{
-    customerId: { type: String}
+    patientId: { type: String}
     }],
   doctors:[{
     doctorId:{type: String}
   }],
   doctorCustomers:[{
-    customerId: { type: String}
+    patientId: { type: String}
+  }],
+  doctorAccepts:[{
+    patientId: { type: String}
+  }],
+  respondantAccepts:[{
+    patientId: { type: String}
   }]
   },
+  
   { timestamps: true }
 );
 

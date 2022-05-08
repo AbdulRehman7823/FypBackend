@@ -9,7 +9,7 @@ router.post('/login',async (req, res)=>{
     if(process.env.admin_username == req.body.username && process.env.admin_password == req.body.password){
       return res.status(200).send({isAdmin:true});
     }else{
-      return res.status(500).send({message:"Username or password incorrect"});
+      return res.status(200).send({message:"Username or password incorrect"});
     }
   }catch(err){
       return res.status(500).send({message:"This product is invalid"});
@@ -22,7 +22,7 @@ router.get("/doctors", async (req, res) => {
     if (doctors.length > 0) {
       res.status(200).send(doctors);
     } else {
-      res.status(400).send("There is no Doctor available");
+      res.status(200).send("There is no Doctor available");
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -37,7 +37,7 @@ router.get("/respondant", async (req, res) => {
     if (respondant.length > 0) {
       res.status(200).send(respondant);
     } else {
-      res.status(400).send("There is no respondant available");
+      res.status(200).send("There is no respondant available");
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -51,20 +51,20 @@ router.get("/patients", async (req, res) => {
     if (patient.length > 0) {
       res.status(200).send(patient);
     } else {
-      res.status(400).send("There is no patient available");
+      res.status(200).send("There is no patient available");
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
+router.delete("/user/:id", async (req, res) => {
   try {
     let user = await User.findByIdAndDelete(req.params.id);
     if (user) {
       res.status(200).send({ message: "user deleted successfully" });
     } else {
-      res.status(400).send({ message: "user is not available" });
+      res.status(200).send({ message: "user is not available" });
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -97,7 +97,6 @@ router.get('/products/:id',async (req, res) => {
   }catch(e){
     res.status(400).send({message: e.message});
   }
-  
 });
 
 
@@ -123,7 +122,7 @@ router.delete("/products/:id", async function (req, res) {
     let id = req.params.id;
     let product = await Product.findByIdAndDelete(id);
     if(!product){
-      res.status(404).send({message: "This product is not available"});
+      res.status(200).send({message: "This product is not available"});
     }
     return res.send(product);
     }catch (err) {

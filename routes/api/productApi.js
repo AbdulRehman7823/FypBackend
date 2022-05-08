@@ -57,7 +57,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async function (req, res) {
     try {
     let id = req.params.id;
-    let product = await Product.findByIdAndDelete(id);
+    let product = await  Product.findByIdAndDelete(id);
     if(!product){
       res.status(404).send({message: "This product is not available"});
     }
