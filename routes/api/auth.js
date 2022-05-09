@@ -8,7 +8,7 @@ router.post("/register", async (req, res) => {
   try {
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      res.status(400).send({ message: "This user already exists" });
+      res.status(200).send({ message: "This user already exists" });
     } else {
         user = new User(req.body);
         user.password = CryptoJS.AES.encrypt(
@@ -34,8 +34,9 @@ router.post("/login", async (req, res) => {
   const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
   const inputPassword = req.body.password;
 
+  console.log(inputPassword+"    "+originalPassword);
     if (originalPassword != inputPassword) {
-      res.status(500).send({ message: "Password is incorrect" });
+      res.status(200).send({ message: "Password is incorrect" });
     } else {
       if(user.userType == 'patient'){
         return res.status(200).send({username: user.username,
@@ -70,5 +71,4 @@ router.post("/login", async (req, res) => {
     res.status(500).send({ message: "This user is not registered." });
   }
 });
-
 module.exports = router;
