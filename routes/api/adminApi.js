@@ -3,6 +3,12 @@ const router = express.Router();
 const User = require("../../models/User");
 const Product = require("../../models/Product")
 
+
+
+router.get("/abc",(req,res)=>{
+     console.log("aaaa");
+     res.send({message:"Hi Ali!"});
+});
 router.post('/login',async (req, res)=>{
   console.log("sasaa")
   try{

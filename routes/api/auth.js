@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../../models/User");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const token  = require("../../middlewares/authenticate")
 
 router.post("/register", async (req, res) => {
   try {
@@ -38,25 +39,29 @@ router.post("/login", async (req, res) => {
     if (originalPassword != inputPassword) {
       res.status(200).send({ message: "Password is incorrect" });
     } else {
+       /*
+      let signedUser={};
       if(user.userType == 'patient'){
-        return res.status(200).send({username: user.username,
-                            email: user.email,
-                            userType:user.userType,
-                            phone: user.phone,
-                            city: user.city,
-                            respondants: user.respondants,
-                            doctors: user.doctors,
-                            });
-                        }
+
+        signedUser = {username: user.username,
+          email: user.email,
+          userType:user.userType,
+          phone: user.phone,
+          city: user.city,
+          respondants: user.respondants,
+          doctors: user.doctors,
+        }}
         else if(user.userType == 'doctor'){
-            return res.status(200).send({username: user.username,
-                                        email: user.email,
-                                        userType:user.userType,
-                                        phone: user.phone,
-                                        city: user.city,
-                                        specialization: user.specialization,
-                                        doctorCustomers: user.doctorCustomers,
-                                        });
+
+          signedUser = {username: user.username,
+            email: user.email,
+            userType:user.userType,
+            phone: user.phone,
+            city: user.city,
+            specialization: user.specialization,
+            doctorCustomers: user.doctorCustomers,
+            }
+            
         } else if(user.userType == 'respondant'){
             return res.status(200).send({username: user.username,
                 email: user.email,
@@ -65,7 +70,18 @@ router.post("/login", async (req, res) => {
                 city: user.city,
                 requests: user.requests,
                 });
-        }       
+        }       */
+
+        const signedUser = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          userType:user.userType,
+          
+          }
+        const  accessToken= jwt.sign(signedUser,process.env.SECRET_TOKEN);
+        res.status(200).json({accessToken:accessToken})
     }
   } else {
     res.status(500).send({ message: "This user is not registered." });
