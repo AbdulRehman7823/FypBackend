@@ -2,9 +2,9 @@ const express = require("express");
 const res = require("express/lib/response");
 const router = express.Router();
 const User = require("../../models/User");
-const token  = require('../../middlewares/authenticate')
+const {verifyToken}  = require('../../middlewares/authenticate')
 
-router.post("/request/respondant/:id",token, async (req, res) => {
+router.post("/request/respondant/:id",verifyToken, async (req, res) => {
   let patient = await User.findById(req.params.id, {
     _id: 1,
     username: 1,
@@ -61,7 +61,7 @@ router.post("/request/respondant/:id",token, async (req, res) => {
   }
 });
 
-router.get('/doctors/:id',token,async (req, res)=>{
+router.get('/doctors/:id',verifyToken,async (req, res)=>{
   try{
     const patient = await User.findById(req.params.id);
     if(patient && patient.userType=="patient"){
@@ -83,7 +83,7 @@ router.get('/doctors/:id',token,async (req, res)=>{
 });
 
 
-router.get('/respondant/:id',token,async (req, res)=>{
+router.get('/respondant/:id',verifyToken,async (req, res)=>{
   try{
     const patient = await User.findById(req.params.id);
     if(patient && patient.userType=="patient"){
@@ -108,7 +108,7 @@ router.get('/respondant/:id',token,async (req, res)=>{
 
 
 
-router.get('/:id',token,async (req, res)=>{
+router.get('/:id',verifyToken,async (req, res)=>{
      
   const patient = await User.findById(req.params.id);
   if(patient){
@@ -124,7 +124,7 @@ router.get('/:id',token,async (req, res)=>{
 
 
 
-router.post("/request/doctor/:id", token,async (req, res) => {
+router.post("/request/doctor/:id", verifyToken,async (req, res) => {
   try {
     let patient = await User.findById(req.params.id, {
       _id: 1,

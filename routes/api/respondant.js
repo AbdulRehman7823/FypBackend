@@ -2,9 +2,9 @@ const { id } = require('@hapi/joi/lib/base');
 const express = require('express');
 const router = express.Router();
 const User = require("../../models/User");
-const token  = require('../../middlewares/authenticate')
+const {verifyToken}  = require('../../middlewares/authenticate')
 
-router.get("/patients/:id",token,async (req, res) => {
+router.get("/patients/:id",verifyToken,async (req, res) => {
     try{
         const respondant = await User.findById(req.params.id);
         if(respondant && respondant.userType=="respondant"){
@@ -27,7 +27,7 @@ router.get("/patients/:id",token,async (req, res) => {
 });
 
 
-router.get('/acceptedPatients/:id',token, async (req, res) => {
+router.get('/acceptedPatients/:id',verifyToken, async (req, res) => {
     try{
         const respondant = await User.findById(req.params.id);
         if(respondant && respondant.userType=="respondant"){
@@ -49,7 +49,7 @@ router.get('/acceptedPatients/:id',token, async (req, res) => {
       }
 })
 
-router.post("/accept/:id", token,async (req, res)=>{
+router.post("/accept/:id", verifyToken,async (req, res)=>{
 
     try{
         const respondant = await User.findById(req.params.id);
@@ -87,7 +87,7 @@ router.post("/accept/:id", token,async (req, res)=>{
      
 });
 
-router.get('/:id',token, async (req, res) => {
+router.get('/:id',verifyToken, async (req, res) => {
     try {
         const respondant = await User.findById(req.params.id);
         if(respondant){

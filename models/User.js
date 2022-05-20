@@ -6,9 +6,10 @@ const userSchema =  mongoose.Schema(
     email: { type: String, required: true, unique: true },
     userType:{type: String, required:true},
     password: { type: String, required: true },
-    phone:{type: String},
-    city:{type: String},
-    img: { type: String },
+    phone:{type: String, required: true},
+    city:{type: String , required: true},
+    img: { type: String , required: true},
+    isAdmin: { type: Boolean},
     respondants:[{
       respondantId: { type: String}
    }],
@@ -27,12 +28,12 @@ const userSchema =  mongoose.Schema(
   }],
   respondantAccepts:[{
     patientId: { type: String}
-  }]
+  }],
+  doctorTime: { type: String},
+  customerTime:[{ type: String}]
   },
-  
+
   { timestamps: true }
 );
-
-
 const user = mongoose.model('User', userSchema);
 module.exports = user; 

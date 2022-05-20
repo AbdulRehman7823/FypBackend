@@ -2,18 +2,15 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
 const Product = require("../../models/Product")
+const jwt = require('jsonwebtoken')
 
-
-
-router.get("/abc",(req,res)=>{
-     console.log("aaaa");
-     res.send({message:"Hi Ali!"});
-});
 router.post('/login',async (req, res)=>{
-  console.log("sasaa")
   try{
     if(process.env.admin_username == req.body.username && process.env.admin_password == req.body.password){
-      return res.status(200).send({isAdmin:true});
+       const token = jwt.sign({username: req.body.username,
+                                password: req.body.password,
+                                isAdmin :true},process.env.ADMIN_SEC)
+      return res.status(200).json({accessToken:token});
     }else{
       return res.status(200).send({message:"Username or password incorrect"});
     }
@@ -51,7 +48,7 @@ router.get("/respondant", async (req, res) => {
 });
 
 
-router.get("/patients", async (req, res) => {
+router.get("/patients",async (req, res) => {
   try {
     let patient = await User.find({userType:"patient"},{username:1,email:1,img:1,city:1,phone:1});
     if (patient.length > 0) {
@@ -64,7 +61,7 @@ router.get("/patients", async (req, res) => {
   }
 });
 
-router.delete("/user/:id", async (req, res) => {
+router.delete("/user/:id",  async (req, res) => {
   try {
     let user = await User.findByIdAndDelete(req.params.id);
     if (user) {
@@ -78,7 +75,7 @@ router.delete("/user/:id", async (req, res) => {
 });
 
   //====================
-  router.get('/products',async (req, res) => { 
+  router.get('/products', async (req, res) => { 
     try{
     let product = await Product.find();
     if(product.length == 0){
@@ -91,7 +88,7 @@ router.delete("/user/:id", async (req, res) => {
     }
 });
 
-router.get('/products/:id',async (req, res) => {
+router.get('/products/:id', async (req, res) => {
   try{
     let id =  req.params.id;
     let product  = await Product.findById(id);
@@ -106,7 +103,7 @@ router.get('/products/:id',async (req, res) => {
 });
 
 
-router.put("/products/:id", async (req, res) => {
+router.put("/products/:id",  async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -122,7 +119,7 @@ router.put("/products/:id", async (req, res) => {
 });
 
 
-router.delete("/products/:id", async function (req, res) {
+router.delete("/products/:id",  async function (req, res) {
 
     try {
     let id = req.params.id;
