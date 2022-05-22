@@ -15,7 +15,11 @@ const userSchema =  mongoose.Schema(
    }],
    specialization:{type: String},
    requests:[{
-    patientId: { type: String}
+    patientId: { type: String},
+    username: { type: String},
+    email: { type: String},
+    img:{ type: String},
+    data: {type: Object}
     }],
   doctors:[{
     doctorId:{type: String}
@@ -26,9 +30,14 @@ const userSchema =  mongoose.Schema(
   doctorAccepts:[{
     patientId: { type: String}
   }],
-  respondantAccepts:[{
-    patientId: { type: String}
-  }],
+  respondantAccepts:
+    [{
+      patientId: { type: String},
+      username: { type: String},
+      email: { type: String},
+      img:{ type: String},
+      data: {type: Object}
+      }],
   doctorTime: { type: String},
   customerTime:[{ type: String}]
   },

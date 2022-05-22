@@ -15,10 +15,10 @@ router.get("/patients/:id",verifyToken,async (req, res) => {
              console.log(records)
              res.status(200).send(records)
            }else{
-            res.status(200).send({message:"There  is no Patient Requested to current Doctor"})
+            res.status(422).send({message:"There  is no Patient Requested to current Doctor"})
            }
         }else{
-          res.status(200).send({message:"There  is no Doctor with this ID"})
+          res.status(422).send({message:"There  is no Doctor with this ID"})
         }
       }catch(err){
             console.log(err)
@@ -38,10 +38,10 @@ router.get('/acceptedPatients/:id', verifyToken,async (req, res) => {
              console.log(records)
              res.status(200).send(records)
            }else{
-            res.status(200).send({message:"No Request Accepted by the current Doctor"})
+            res.status(422).send({message:"No Request Accepted by the current Doctor"})
            }
         }else{
-          res.status(200).send({message:"There  is no Doctor with this ID"})
+          res.status(422).send({message:"There  is no Doctor with this ID"})
         }
       }catch(err){
             console.log(err)
@@ -67,7 +67,7 @@ router.post("/accept/:id",verifyToken, async (req, res)=>{
         })
 
         if(!isExist){
-            return res.status(200).send({message:"There is no Request From given Patient to current Doctor"})
+            return res.status(422).send({message:"There is no Request From given Patient to current Doctor"})
         }else 
         if(doctor && doctor.userType=="doctor"){
            const patients = doctor.doctorAccepts;
@@ -80,7 +80,7 @@ router.post("/accept/:id",verifyToken, async (req, res)=>{
             await doctor.save();
             res.status(200).send(doctor);
         }else{
-          res.status(200).send({message:"There  is no Doctor with this ID"})
+          res.status(422).send({message:"There  is no Doctor with this ID"})
         }
       }catch(err){
             console.log(err)
@@ -95,7 +95,7 @@ router.get('/:id', verifyToken,async (req, res) => {
         if(doctor){
             res.status(200).send(doctor);
         }else{
-            res.status(200).send({message:"There  is no Doctor with this ID."});
+            res.status(422).send({message:"There  is no Doctor with this ID."});
         }
     } catch (error) {
         res.status(500).send(error.message);

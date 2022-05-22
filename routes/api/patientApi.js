@@ -39,24 +39,26 @@ router.post("/request/respondant/:id",verifyToken, async (req, res) => {
 
       if(check===1){
             return res
-            .status(400)
+            .status(422)
             .send({
               message: "This Respondant is already Requested by current User",
             });
       }else if(check===2){
             return res
-            .status(400)
+            .status(422)
             .send({ message: "This Patient is already Requested" });
       }
       patient.respondants.push(respondant.id);
-      respondant.requests.push(patient.id);
+      let obj = { patientId:patient.id,username:patient.username,
+        email:patient.email, img:patient.img,data:req.body.data}
+      respondant.requests.push(obj);
     
     await patient.save();
     await respondant.save();
     return res.status(200).send({ Patient: patient, Respondant: respondant });
   } else {
     return res
-      .status(400)
+      .status(422)
       .send({ message: "Patient or Respondant Id is not correct" });
   }
 });
@@ -72,10 +74,10 @@ router.get('/doctors/:id',verifyToken,async (req, res)=>{
          console.log(records)
          res.status(200).send(records)
        }else{
-        res.status(200).send({message:"There  is no Doctor Appointed by current Patient"})
+        res.status(422).send({message:"There  is no Doctor Appointed by current Patient"})
        }
     }else{
-      res.status(200).send({message:"There  is no Patient with this ID"})
+      res.status(422).send({message:"There  is no Patient with this ID"})
     }
   }catch(err){
         console.log(err)
@@ -94,13 +96,13 @@ router.get('/respondant/:id',verifyToken,async (req, res)=>{
          console.log(records)
          res.status(200).send(records)
        }else{
-        res.status(200).send({message:"There  is no Respondant Appointed by current Patient"})
+        res.status(422).send({message:"There  is no Respondant Appointed by current Patient"})
        }
     }else{
-      res.status(200).send({message:"There  is no Patient with this ID"})
+      res.status(422).send({message:"There  is no Patient with this ID"})
     }
   }catch(err){
-        res.status(500).send({message:"There is an error "+err.message});
+        res.status(422).send({message:"There is an error "+err.message});
   }
 });
 
@@ -115,7 +117,7 @@ router.get('/:id',verifyToken,async (req, res)=>{
 
     res.status(200).send(patient);
   }else{
-    res.status(200).send({message:"There  is no Patient with this ID"})
+    res.status(422).send({message:"There  is no Patient with this ID"})
   }
 
 });
@@ -160,13 +162,13 @@ router.post("/request/doctor/:id", verifyToken,async (req, res) => {
 
       if(check===1){
             return res
-            .status(400)
+            .status(422)
             .json({
               message: "This Doctor is already Appointed by current Patient",
             });
       }else if(check===2){
             return res
-            .status(400)
+            .status(422)
             .json({
               message: "This Customer is already in contact with current doctor",
             });
@@ -182,11 +184,11 @@ router.post("/request/doctor/:id", verifyToken,async (req, res) => {
       return res.status(200).json({ Patient: patient, Doctor: doctor });
     } else {
       return res
-        .status(404)
+        .status(422)
         .json({ message: "Patient or doctor Id is incorrect" });
     }
   } catch (err) {
-    return res.status(400).json({ Message: err.message });
+    return res.status(422).json({ Message: err.message });
   }
 });
 module.exports = router;

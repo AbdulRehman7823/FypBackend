@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-console.log(token);
+    
+    const token = req.headers['authorization'];
+//console.log(token);
     if(token==null) return res.status(401).send({message:"There is no token"})
     jwt.verify(token,process.env.SECRET_TOKEN,(err,user) => {
         if(err) return res.status(403).send({message:"You are not Authenticated"});
