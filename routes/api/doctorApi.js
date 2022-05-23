@@ -11,11 +11,9 @@ router.get("/patients/:id",verifyToken,async (req, res) => {
            const patients = doctor.doctorCustomers;
            console.log(patients)
            if(patients.length > 0){
-             const records = await User.find().where('_id').in(patients).exec();
-             console.log(records)
-             res.status(200).send(records)
+             res.status(200).send(patients)
            }else{
-            res.status(422).send({message:"There  is no Patient Requested to current Doctor"})
+            res.status(200).send([])
            }
         }else{
           res.status(422).send({message:"There  is no Doctor with this ID"})
@@ -101,5 +99,4 @@ router.get('/:id', verifyToken,async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-
 module.exports = router;

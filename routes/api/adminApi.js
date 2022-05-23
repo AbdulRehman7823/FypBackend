@@ -21,14 +21,14 @@ router.post('/login',async (req, res)=>{
 
 router.get("/doctors", async (req, res) => {
   try {
-    let doctors = await User.find({userType:"doctor"},{username:1,email:1,img:1,specialization:1,city:1,phone:1});
+    let doctors = await User.find({userType:"doctor"},{username:1,email:1,img:1,specialization:1,city:1,phone:1,doctorTime:1,fee:1});
     if (doctors.length > 0) {
       res.status(200).send(doctors);
     } else {
-      res.status(200).send("There is no Doctor available");
+      res.status(200).send([]);
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(422).send(error.message);
   }
 });
 
@@ -40,7 +40,7 @@ router.get("/respondant", async (req, res) => {
     if (respondant.length > 0) {
       res.status(200).send(respondant);
     } else {
-      res.status(200).send("There is no respondant available");
+      res.status(200).send([]);
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -54,7 +54,7 @@ router.get("/patients",async (req, res) => {
     if (patient.length > 0) {
       res.status(200).send(patient);
     } else {
-      res.status(200).send("There is no patient available");
+      res.status(200).send([]);
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -79,7 +79,7 @@ router.delete("/user/:id",  async (req, res) => {
     try{
     let product = await Product.find();
     if(product.length == 0){
-      return res.status(200).send("There is no Product")
+      return res.status(200).send([])
     }else
     res.status(200).send(product);
     console.log("requested");

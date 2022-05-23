@@ -2,6 +2,7 @@ const express = require("express");
 const res = require("express/lib/response");
 const router = express.Router();
 const User = require("../../models/User");
+const axios = require("axios");
 const {verifyToken}  = require('../../middlewares/authenticate')
 
 router.post("/request/respondant/:id",verifyToken, async (req, res) => {
@@ -10,12 +11,14 @@ router.post("/request/respondant/:id",verifyToken, async (req, res) => {
     username: 1,
     email: 1,
     respondants: 1,
+    img:1,
   });
   let respondant = await User.findById(req.body.respondantId, {
     _id: 1,
     username: 1,
     email: 1,
     requests: 1,
+    img:1,
   });
   if (patient && respondant) {
 
@@ -127,18 +130,23 @@ router.get('/:id',verifyToken,async (req, res)=>{
 
 
 router.post("/request/doctor/:id", verifyToken,async (req, res) => {
+  
+  
+  console.log(req.body)
   try {
     let patient = await User.findById(req.params.id, {
       _id: 1,
       username: 1,
       email: 1,
       doctors: 1,
+      img:1,
     });
     let doctor = await User.findById(req.body.doctorId, {
       _id: 1,
       username: 1,
       email: 1,
       doctorCustomers: 1,
+      img:1,
     });
     if (patient && doctor) {
 
@@ -174,21 +182,32 @@ router.post("/request/doctor/:id", verifyToken,async (req, res) => {
             });
       }
 
-     
+      const object  = {
+        patientId: req.params.id,
+        username:patient.username, 
+        email:patient.email,
+        img:patient.img,
+        data: req.body.data
+      }
 
-     
       patient.doctors.push(doctor.id); 
-      doctor.doctorCustomers.push(patient.id);
+      doctor.doctorCustomers.push(object);
       await doctor.save();
       await patient.save();
-      return res.status(200).json({ Patient: patient, Doctor: doctor });
+
+      const response =   await axios.post("http://localhost:3000/api/checkout/payment",{
+        tokenId:req.body.tokenId,
+        amount:req.body.amount,
+        });
+      return  res.status(200).json({ Patient: patient, Doctor: doctor ,Response:response})
+
     } else {
       return res
         .status(422)
         .json({ message: "Patient or doctor Id is incorrect" });
     }
   } catch (err) {
-    return res.status(422).json({ Message: err.message });
+    return res.status(500).json({ Message: err.message });
   }
 });
 module.exports = router;

@@ -2,6 +2,43 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../../models/Product');
 
+//cart
+
+
+
+router.get("/cart/:id", async function (req, res, next) {
+  let product = await Product.findById(req.params.id);
+  console.log("Add This Product in cart/"+req.params.id);
+  let cart = [];
+  if (req.cookies.cart) cart = req.cookies.cart;
+  cart.push(product);
+  console.log("added to cart");
+  res.cookie("cart",cart);
+  res.send(cart);
+  
+});
+
+router.get("/cart/remove/:id", async function (req, res, next) {
+  let cart = [];
+  if (req.cookies.cart) cart = req.cookies.cart;
+  cart.splice(
+    cart.findIndex((c) => c._id == req.params.id),
+    1
+  );
+  res.cookie("cart", cart);
+  res.send(cart);
+});
+
+router.get("/cart", async function (req, res, next) {
+  let cart =req.cookies.cart;
+  if (!cart) cart = [];
+  console.log({cart});
+    res.send({cart});
+});
+
+
+
+
 router.get('/',async (req, res) => {
   try{ 
     let product = await Product.find();

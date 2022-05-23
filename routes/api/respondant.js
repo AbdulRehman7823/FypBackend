@@ -9,18 +9,15 @@ router.get("/patients/:id",verifyToken,async (req, res) => {
         const respondant = await User.findById(req.params.id);
         if(respondant && respondant.userType=="respondant"){
            const patients = respondant.requests;
-           //console.log(patients)
            if(patients.length > 0){
-             
              res.status(200).send(patients)
            }else{
-            res.status(422).send({message:"There  is no Patient Requested to current respondant"})
+            res.status(200).send([])
            }
         }else{
           res.status(422).send({message:"There  is no respondant with this ID"})
         }
       }catch(err){
-           // console.log(err)
             res.status(500).send({message:"There is some Error "+err.message})
       }
 });
@@ -33,10 +30,9 @@ router.get('/acceptedPatients/:id',verifyToken, async (req, res) => {
            const patients = respondant.respondantAccepts;
            console.log(patients)
            if(patients.length > 0){
-             
              res.status(200).send(patients)
            }else{
-            res.status(422).send({message:"No Request Accepted by the current respondant"})
+            res.status(200).send([])
            }
         }else{
           res.status(422).send({message:"There  is no respondant with this ID"})

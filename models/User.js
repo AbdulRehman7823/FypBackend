@@ -25,7 +25,11 @@ const userSchema =  mongoose.Schema(
     doctorId:{type: String}
   }],
   doctorCustomers:[{
-    patientId: { type: String}
+    patientId: { type: String},
+    username: { type: String},
+    email: { type: String},
+    img:{ type: String},
+    data: {type: Object}
   }],
   doctorAccepts:[{
     patientId: { type: String}
@@ -39,9 +43,9 @@ const userSchema =  mongoose.Schema(
       data: {type: Object}
       }],
   doctorTime: { type: String},
-  customerTime:[{ type: String}]
+  customerTime:[{ type: String}],
+  fee:{type: Number}
   },
-
   { timestamps: true }
 );
 const user = mongoose.model('User', userSchema);
